@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace BlankSiteCore
+namespace MedioClinic
 {
     public class Startup
     {
@@ -56,6 +56,9 @@ namespace BlankSiteCore
             services.AddAuthentication();
             // services.AddAuthorization();
 
+            //To help in mitigating clickjacking attacks, add a call to
+            services.AddAntiforgery();
+
             services.AddControllersWithViews();
         }
 
@@ -65,6 +68,7 @@ namespace BlankSiteCore
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
             }
 
             app.UseStaticFiles();
