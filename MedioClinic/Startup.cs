@@ -1,7 +1,8 @@
+using Autofac;
 using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
 using Kentico.Web.Mvc;
-
+using MedioClinic.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,7 +14,7 @@ namespace MedioClinic
     public class Startup
     {
         public IWebHostEnvironment Environment { get; }
-
+        public AutoFacConfig AutoFacConfig => new AutoFacConfig();
 
         public Startup(IWebHostEnvironment environment)
         {
@@ -91,6 +92,25 @@ namespace MedioClinic
                     await context.Response.WriteAsync("The site has not been configured yet.");
                 });
             });
+        }
+
+        /// <summary>
+        /// Registers a handler in case Xperience is not initialized yet.
+        /// </summary>
+        /// <param name="builder">Container builder.</param>
+        private void RegisterInitializationHandler(ContainerBuilder builder) =>
+            CMS.Base.ApplicationEvents.Initialized.Execute += (sender, eventArgs) => AutoFacConfig.ConfigureContainer(builder);
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            try
+            {
+                AutoFacConfig.ConfigureContainer(builder);
+            }
+            catch
+            {
+                RegisterInitializationHandler(builder);
+            }
         }
     }
 }
