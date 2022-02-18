@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Reflection;
+using XperienceAdapter.Localization;
 
 namespace MedioClinic
 {
@@ -60,7 +62,18 @@ namespace MedioClinic
             //To help in mitigating clickjacking attacks, add a call to
             services.AddAntiforgery();
 
-            services.AddControllersWithViews();
+            services.AddLocalization();
+
+            services.AddControllersWithViews()
+                .AddDataAnnotationsLocalization(options =>
+                {
+                    options.DataAnnotationLocalizerProvider = (type, factory) =>
+                    {
+                        var assemblyName = typeof(SharedResource).GetTypeInfo().Assembly.GetName().Name;
+
+                        return factory.Create("SharedResource", assemblyName);
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
