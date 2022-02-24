@@ -1,4 +1,5 @@
 using Autofac;
+using Core.Configuration;
 using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
 using Kentico.Web.Mvc;
@@ -6,6 +7,7 @@ using MedioClinic.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
@@ -18,9 +20,12 @@ namespace MedioClinic
         public IWebHostEnvironment Environment { get; }
         public AutoFacConfig AutoFacConfig => new AutoFacConfig();
 
-        public Startup(IWebHostEnvironment environment)
+        public IConfigurationSection? Options { get; }
+
+        public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
             Environment = environment;
+            Options = configuration.GetSection(nameof(XperienceOptions));
         }
 
 
@@ -74,6 +79,8 @@ namespace MedioClinic
                         return factory.Create("SharedResource", assemblyName);
                     };
                 });
+
+            services.Configure<XperienceOptions>(Options);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
