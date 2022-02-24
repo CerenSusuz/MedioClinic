@@ -5,11 +5,10 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using XperienceAdapter.Models;
+using XperienceAdapter.Repositories;
 
 namespace XperienceAdapter.Extensions
 {
-    public static class CultureExtensions
-    {
 		public static class CultureExtensions
 		{
 			public static SiteCulture? ToSiteCulture(this CultureInfo cultureInfo)
@@ -32,4 +31,3 @@ namespace XperienceAdapter.Extensions
 			}
 		}
 	}
-}

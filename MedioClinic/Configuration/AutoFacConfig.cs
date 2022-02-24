@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using XperienceAdapter.Localization;
 using XperienceAdapter.Repositories;
+using XperienceAdapter.Services;
 
 namespace MedioClinic.Configuration
 {
@@ -36,6 +37,9 @@ namespace MedioClinic.Configuration
 			builder.RegisterType<XperienceStringLocalizerFactory>()
 				.As<IStringLocalizerFactory>()
 				.InstancePerLifetimeScope();
+
+			builder.RegisterType<RepositoryServices>().As<IRepositoryServices>()
+	.InstancePerLifetimeScope();
 		}
 	}
 

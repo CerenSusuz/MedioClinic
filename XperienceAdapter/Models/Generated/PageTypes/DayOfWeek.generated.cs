@@ -9,13 +9,10 @@
 // </auto-generated>
 //--------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 using CMS;
 using CMS.Base;
 using CMS.Helpers;
 using CMS.DataEngine;
-using CMS.DocumentEngine;
 using CMS.DocumentEngine.Types.MedioClinic;
 
 [assembly: RegisterDocumentType(DayOfWeek.CLASS_NAME, typeof(DayOfWeek))]
