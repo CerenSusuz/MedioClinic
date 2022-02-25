@@ -8,6 +8,7 @@ namespace Business.Repositories
 {
 	/// <summary>
 	/// Stores company information.
+	/// The repository will be used by the controller that powers the Contact us page.
 	/// </summary>
 	public class CompanyRepository : BasePageRepository<Models.Company, CMS.DocumentEngine.Types.MedioClinic.Company>
 	{
