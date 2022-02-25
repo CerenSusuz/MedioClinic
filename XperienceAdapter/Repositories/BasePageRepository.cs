@@ -214,6 +214,65 @@ namespace XperienceAdapter.Repositories
         /// <param name="dto">Page DTO.</param>
         public virtual void MapDtoProperties(TPage page, TPageDto dto) { }
 
+        /// <summary>
+        /// Maps query results onto DTOs.
+        /// </summary>
+        /// <param name="pages">Xperience pages.</param>
+        /// <param name="additionalMapper">Ad-hoc mapper supplied as a parameter.</param>
+        /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
+        /// <returns>Page DTOs.</returns>
+        protected IEnumerable<TPageDto> MapPages(
+            IEnumerable<TPage?>? pages = default,
+            Func<TPage, TPageDto, TPageDto>? additionalMapper = default,
+            bool includeAttachments = default)
+        {
+            if (pages != null && pages.Any())
+            {
+                if (additionalMapper != null)
+                {
+                    foreach (var page in pages)
+                    {
+                        var dto = ApplyMappers(page!, includeAttachments);
+
+                        if (dto != null)
+                        {
+                            yield return additionalMapper(page!, dto);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var page in pages)
+                    {
+                        var dto = ApplyMappers(page!, includeAttachments);
+
+                        if (dto != null)
+                        {
+                            yield return dto;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Applies the basic mapper as well as the type-specific one.
+        /// </summary>
+        /// <param name="page">Xperience page.</param>
+        /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
+        /// <returns>Page DTO.</returns>
+        protected TPageDto ApplyMappers(TPage page, bool includeAttachments)
+        {
+            var dto = MapBasicDtoProperties(page, includeAttachments);
+            MapDtoProperties(page, dto);
+
+            return dto;
+        }
+
+
+
+
+
 
 
     }
