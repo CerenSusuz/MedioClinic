@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CMS.DocumentEngine;
+using CMS.Helpers;
 using Kentico.Content.Web.Mvc;
 using XperienceAdapter.Models;
 using XperienceAdapter.Services;
@@ -270,8 +271,20 @@ namespace XperienceAdapter.Repositories
         }
 
 
+        /// <summary>
+        /// create a method that produces the CacheSettings objects. 
+        /// The method will only be called from within the two GetPagesByTypeAndCulture* interface methods, since the other two use IPageRetriever internally (with no need to work with a standalone CacheSettings object).
+        /// </summary>
+        /// <param name="cacheKey"></param>
+        /// <param name="cacheDependencies"></param>
+        /// <returns></returns>
+        protected static CacheSettings GetCacheSettings(string cacheKey, params string[] cacheDependencies)
+        {
+            var settings = new CacheSettings(TimeSpan.FromMinutes(10).TotalMinutes, cacheKey);
+            settings.CacheDependency = CacheHelper.GetCacheDependency(cacheDependencies);
 
-
+            return settings;
+        }
 
 
 
