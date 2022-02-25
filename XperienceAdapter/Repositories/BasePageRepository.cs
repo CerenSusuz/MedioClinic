@@ -64,5 +64,47 @@ namespace XperienceAdapter.Repositories
         {
             throw new NotImplementedException();
         }
+
+
+        /// <summary>
+        /// a method that helps in preparing the query objects. 
+        /// use the interface to configure common querying parameters for both DocumentQuery and Multi Document Query objects.
+        /// However, since all DocumentQuery retrievals in the MedioClinic solution can be handled through IPageRetriever (i.e. without the need to use DocumentHelper), this method will in fact only make sure all queries are configured in the same way as IPageRetriever. 
+        /// The method will only be used in the callstack of the GetPagesByTypeAndCulture and GetPagesByTypeAndCultureAsync methods.
+        /// </summary>
+        /// <typeparam name="TQuery"></typeparam>
+        /// <typeparam name="TObject"></typeparam>
+        /// <param name="query"></param>
+        /// <param name="siteCulture"></param>
+        /// <returns></returns>
+        protected virtual TQuery FilterFor<TQuery, TObject>(IDocumentQuery<TQuery, TObject> query, SiteCulture? siteCulture = default)
+            where TQuery : IDocumentQuery<TQuery, TObject>
+            where TObject : TreeNode, new()
+        {
+            var typedQuery = query.GetTypedQuery();
+
+            typedQuery
+                .OnSite(_repositoryServices.SiteService.CurrentSite.SiteName);
+
+            if (siteCulture != null)
+            {
+                typedQuery.Culture(siteCulture.IsoCode);
+            }
+
+            if (_repositoryServices.SiteContextService.IsPreviewEnabled)
+            {
+                typedQuery
+                    .LatestVersion()
+                    .Published(false);
+            }
+            else
+            {
+                typedQuery
+                    .Published()
+                    .PublishedVersion();
+            }
+
+            return typedQuery;
+        }
     }
 }
