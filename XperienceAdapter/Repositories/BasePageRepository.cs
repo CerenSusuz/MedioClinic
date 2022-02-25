@@ -51,11 +51,6 @@ namespace XperienceAdapter.Repositories
             throw new NotImplementedException();
         }
 
-        public void MapDtoProperties(TPage page, TPageDto dto)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<TPageDto> GetAll()
         {
             throw new NotImplementedException();
@@ -175,8 +170,49 @@ namespace XperienceAdapter.Repositories
         }
 
 
+        /// <summary>
+        /// Maps basic Xperience page properties onto DTO ones.
+        /// </summary>
+        /// <param name="page">Xperience page.</param>
+        /// <param name="includeAttachments">Indicates if attachment information shall be included.</param>
+        /// <returns>Page DTO.</returns>
+        protected virtual TPageDto MapBasicDtoProperties(TPage page, bool includeAttachments)
+        {
+            var dto = DefaultDtoFactory();
+            dto.Guid = page.DocumentGUID;
+            dto.NodeId = page.NodeID;
+            dto.Name = page.DocumentName;
+            dto.NodeAliasPath = page.NodeAliasPath;
+            dto.ParentId = page.NodeParentID;
+            dto.Culture = _repositoryServices.SiteCultureRepository.GetByExactIsoCode(page.DocumentCulture);
+
+            if (includeAttachments)
+            {
+                foreach (var attachment in page.Attachments)
+                {
+                    dto.Attachments.Add(new PageAttachment
+                    {
+                        AttachmentUrl = _repositoryServices.PageAttachmentUrlRetriever.Retrieve(attachment),
+                        Extension = attachment.AttachmentExtension,
+                        FileName = attachment.AttachmentName,
+                        Guid = attachment.AttachmentGUID,
+                        Id = attachment.ID,
+                        MimeType = attachment.AttachmentMimeType,
+                        Title = attachment.AttachmentTitle
+                    });
+                }
+            }
+
+            return dto;
+        }
 
 
+        /// <summary>
+        /// Default DTO mapping method.
+        /// </summary>
+        /// <param name="page">Xperience page.</param>
+        /// <param name="dto">Page DTO.</param>
+        public virtual void MapDtoProperties(TPage page, TPageDto dto) { }
 
 
 
