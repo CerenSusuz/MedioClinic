@@ -2,12 +2,15 @@
 using CMS.DataEngine;
 using CMS.DocumentEngine;
 using CMS.SiteProvider;
+using CMS.Helpers.Caching;
 using Kentico.Content.Web.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
 
@@ -63,5 +66,20 @@ namespace Business.Repositories
 		_basePageRepository = basePageRepository ?? throw new ArgumentNullException(nameof(basePageRepository));
 		_cultureRepository = siteCultureRepository ?? throw new ArgumentNullException(nameof(siteCultureRepository));
 	}
-}
+
+        public Task<Dictionary<SiteCulture, NavigationItem>> GetWholeNavigationAsync(CancellationToken? cancellationToken = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<NavigationItem> GetNavigationAsync(SiteCulture? siteCulture = null, CancellationToken? cancellationToken = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public NavigationItem? GetNavigationItemByNodeId(int nodeId, NavigationItem startPointItem)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
