@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CMS.DocumentEngine;
@@ -106,5 +107,78 @@ namespace XperienceAdapter.Repositories
 
             return typedQuery;
         }
+
+
+
+        /// <summary>
+        /// The method has exactly the same set of parameters, however, it returns IEnumerable<Page>.
+        /// Since the GetPagesByTypeAndCulture* methods will be used for the sole purpose of retrieving pages of types inheriting fields from a common page type, the current method can return TPage instead of TreeNode.
+        /// </summary>
+        /// <param name="types"></param>
+        /// <param name="culture"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        protected IEnumerable<TPage> GetPagesOfMultipleTypes(
+    IEnumerable<string> types,
+    SiteCulture culture,
+    Action<MultiDocumentQuery>? filter = default)
+        {
+            MultiDocumentQuery query = GetQueryForMultipleTypes(types, culture, filter);
+
+            return query
+                .GetEnumerableTypedResult()
+                .Select(page => page as TPage)
+                .Where(page => page != null)!;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="types"></param>
+        /// <param name="culture"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        protected async Task<IEnumerable<TPage>> GetPagesOfMultipleTypesAsync(
+            IEnumerable<string> types,
+            SiteCulture culture,
+            Action<MultiDocumentQuery>? filter = default)
+        {
+            MultiDocumentQuery query = GetQueryForMultipleTypes(types, culture, filter);
+
+            return (await query
+                .GetEnumerableTypedResultAsync())
+                .Select(page => page as TPage)
+                .Where(page => page != null)!;
+        }
+
+        /// <summary>
+        ///  lets you specify page types that will be retrieved, culture, and a custom MultiDocumentQuery filter.
+        /// </summary>
+        /// <param name="types"></param>
+        /// <param name="culture"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        protected MultiDocumentQuery GetQueryForMultipleTypes(
+            IEnumerable<string> types,
+            SiteCulture? culture,
+            Action<MultiDocumentQuery>? filter)
+        {
+            var query = new MultiDocumentQuery();
+
+            query = FilterFor(query, culture)
+                .Types(types.ToArray())
+                .WithCoupledColumns();
+
+            filter?.Invoke(query);
+
+            return query;
+        }
+
+
+
+
+
+
+
     }
 }
