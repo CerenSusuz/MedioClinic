@@ -10,6 +10,8 @@ namespace Business.Repositories
 {
 	/// <summary>
 	/// Stores navigation.
+	/// This repository is designed based on the idea of multiple navigation hierarchies, built for each culture. Therefore, the repository should expose one method that returns the whole set of hierarchies of all site cultures, and another that returns one hierarchy per culture.
+	/// Additionally, it should allow you to search for a navigation item in a different culture.The repository will search by a node ID, which is a common denominator between all language variants of a particular navigation item.
 	/// </summary>
 	public interface INavigationRepository
 	{
