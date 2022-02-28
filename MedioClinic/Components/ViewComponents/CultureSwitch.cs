@@ -62,9 +62,6 @@ public class CultureSwitch : ViewComponent
 		return null;
 	}
 
-
-
-
 	/// <summary>
 	/// 
 	/// </summary>
@@ -97,8 +94,26 @@ public class CultureSwitch : ViewComponent
 		return null;
 	}
 
+	/// <summary>
+	/// This method will localize the URL of the currently displayed page, in a similar way that the GetDatabaseUrlVariantsAsync method does.
+	/// However, it will be used in cases when the currently displayed page does not come from any Xperience page in the content tree.Unlike the previous method, this one will only localize the culture URL segment, leaving the rest of the URL unchanged.
+	/// </summary>
+	/// <param name="searchPath"></param>
+	/// <returns></returns>
+	private IEnumerable<KeyValuePair<SiteCulture, string>>? GetNonDatabaseUrlVariants(string searchPath)
+	{
+		var cultures = _siteCultureRepository.GetAll();
+		var segments = searchPath.Split('/');
 
+		if (cultures.Any(culture => culture.IsoCode?.Equals(segments?[1], StringComparison.InvariantCultureIgnoreCase) == true))
+		{
+			var trailingPath = string.Join('/', segments.Skip(2));
 
+			return cultures.Select(culture => new KeyValuePair<SiteCulture, string>(culture, $"/{culture.IsoCode?.ToLower()}/{trailingPath}"));
+		}
+
+		return null;
+	}
 
 
 
