@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using XperienceAdapter.Extensions;
 using XperienceAdapter.Models;
 using XperienceAdapter.Repositories;
 
@@ -115,7 +117,24 @@ public class CultureSwitch : ViewComponent
 		return null;
 	}
 
+	/// <summary>
+	/// With both the GetDatabaseUrlVariantsAsync and GetNonDatabaseUrlVariants methods implemented, it is time to orchestrate the two to get localized URLs, either from the database, or otherwise.
+	/// </summary>
+	/// <returns></returns>
+	private async Task<IEnumerable<KeyValuePair<SiteCulture, string>>>? GetUrlCultureVariantsAsync()
+	{
+		var defaultCulture = _siteCultureRepository.DefaultSiteCulture;
+		var completePath = string.IsNullOrEmpty(Request.PathBase) ? Request.Path.Value : $"{Request.PathBase}{Request.Path.Value}";
+		var searchPath = Request.Path.Equals("/") && defaultCulture != null ? $"/{defaultCulture.IsoCode?.ToLowerInvariant()}/home/" : completePath;
+		var currentCulture = Thread.CurrentThread.CurrentUICulture.ToSiteCulture();
 
+		if (currentCulture != null && !ExcludedPaths.Any(path => searchPath.Contains(path)))
+		{
+			return await GetDatabaseUrlVariantsAsync(searchPath, currentCulture) ?? GetNonDatabaseUrlVariants(searchPath);
+		}
+
+		return null;
+	}
 
 
 }
