@@ -4,6 +4,7 @@ using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
 using Kentico.Web.Mvc;
 using MedioClinic.Configuration;
+using MedioClinic.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -95,6 +96,8 @@ namespace MedioClinic
             app.UseStaticFiles();
 
             app.UseKentico();
+
+            app.UseRequestCulture();
 
             app.UseCookiePolicy();
 
