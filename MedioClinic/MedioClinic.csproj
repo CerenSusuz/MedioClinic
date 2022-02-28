@@ -22,5 +22,9 @@
     <ProjectReference Include="..\XperienceAdapter\XperienceAdapter.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\" />
+  </ItemGroup>
+
 </Project>
 
