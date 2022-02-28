@@ -2,6 +2,9 @@
 
 namespace MedioClinic.Models
 {
+    /// <summary>
+    /// support for page metadata.
+    /// </summary>
     public class PageMetadata : IPageMetadata
     {
         public string? Title { get; set; }
