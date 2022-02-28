@@ -1,0 +1,8 @@
+﻿@using Microsoft.Extensions.Localization
+@model Business.Models.Company
+@inject IStringLocalizer<SharedResource> StringLocalizer
+
+<h5 class="white-text">@StringLocalizer["ViewComponent.Contact.Contact"]</h5>
+<address class="white-text">
+    @Html.DisplayForModel()
+</address>
