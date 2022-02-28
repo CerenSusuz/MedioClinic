@@ -93,6 +93,8 @@ namespace MedioClinic
                 app.UseBrowserLink();
             }
 
+            app.UseLocalizedStatusCodePagesWithReExecute("/{0}/error/{1}/");
+
             app.UseStaticFiles();
 
             app.UseKentico();

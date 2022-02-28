@@ -95,6 +95,7 @@ namespace MedioClinic.Extensions
 
 		/// <summary>
 		/// Re-executes the HTTP request with new values.
+		/// In the name of the single-responsibility-pattern principle, this method is only responsible for reconfiguring the request values and re-executing the request.
 		/// </summary>
 		/// <param name="context">Status code context.</param>
 		/// <param name="originalPath">Original path.</param>
