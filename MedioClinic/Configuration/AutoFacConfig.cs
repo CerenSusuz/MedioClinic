@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Business.Repositories;
 using Core;
 using Microsoft.Extensions.Localization;
 using System;
@@ -40,6 +41,14 @@ namespace MedioClinic.Configuration
 
 			builder.RegisterType<RepositoryServices>().As<IRepositoryServices>()
 	.InstancePerLifetimeScope();
+
+			builder.RegisterType<NavigationRepository>()
+	.As<INavigationRepository>()
+	.InstancePerLifetimeScope();
+
+
+
+
 		}
 	}
 
