@@ -78,6 +78,7 @@ public class CultureSwitch : ViewComponent
 		return null;
 	}
 
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -110,6 +111,7 @@ public class CultureSwitch : ViewComponent
 		return null;
 	}
 
+
 	/// <summary>
 	/// This method will localize the URL of the currently displayed page, in a similar way that the GetDatabaseUrlVariantsAsync method does.
 	/// However, it will be used in cases when the currently displayed page does not come from any Xperience page in the content tree.Unlike the previous method, this one will only localize the culture URL segment, leaving the rest of the URL unchanged.
@@ -130,6 +132,7 @@ public class CultureSwitch : ViewComponent
 
 		return null;
 	}
+
 
 	/// <summary>
 	/// With both the GetDatabaseUrlVariantsAsync and GetNonDatabaseUrlVariants methods implemented, it is time to orchestrate the two to get localized URLs, either from the database, or otherwise.
