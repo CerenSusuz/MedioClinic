@@ -5,7 +5,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <title>@Model?.Metadata.Title</title>
+    <link rel="shortcut icon" type="image/png" href="~/favicon.png" />
+    <meta name="description" content="@Model?.Metadata.Description" />
+    <meta name="keywords" content="@Model?.Metadata.Keywords" />
 
+    <!-- OpenGraph -->
+    <meta property="og:title" content="@Model?.Metadata.Title" />
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/materialize.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/materialize.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    @RenderSection("Styles", required: false)
 </head>
 <body>
 
