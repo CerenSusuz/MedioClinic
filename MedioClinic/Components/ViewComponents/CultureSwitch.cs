@@ -32,6 +32,20 @@ public class CultureSwitch : ViewComponent
 	}
 
 	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="cultureSwitchId"></param>
+	/// <returns></returns>
+	public async Task<IViewComponentResult> InvokeAsync(string cultureSwitchId)
+	{
+		var variants = await GetUrlCultureVariantsAsync();
+		var model = (cultureSwitchId, variants?.ToDictionary(kvp1 => kvp1.Key, kvp2 => kvp2.Value));
+
+		return View(model);
+	}
+
+
+	/// <summary>
 	/// a method that searches for a navigation item in the hierarchy by the relative URL.
 	/// </summary>
 	/// <param name="searchPath"></param>
