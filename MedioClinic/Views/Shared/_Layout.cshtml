@@ -4,6 +4,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
@@ -27,7 +28,45 @@
     </environment>
     @RenderSection("Styles", required: false)
 </head>
-<body>
 
+<body>
+    @*First, use the <vc> tag helper to invoke the future navigation view component.
+        The component will accept a "placement" parameter, in this case set to "Top"*@
+    <vc:navigation placement="Top" />
+
+    @*Beneath the navigation markup, you should add code that conditionally displays the user messages. 
+      To render the message, use a DisplayFor method that invokes a future display template.*@
+    @if (Model?.UserMessage.Display == true && !string.IsNullOrEmpty(Model?.UserMessage.Message))
+    {
+        <section class="row section container">
+            @Html.DisplayFor(m => m.UserMessage)
+        </section>
+    }
+
+   @* Next comes the main body of each page.*@
+    @RenderBody()
+
+    <vc:footer />
+
+    @*To add the JavaScript code, use the same <environment> tag helpers with similar attributes as you did for the CSS files.*@
+
+    @* The asp-fallback-test must contain a JavaScript expression that must return true, see https://github.com/aspnet/Mvc/issues/1576 *@
+    <environment exclude="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"
+                asp-fallback-src="~/js/materialize.min.js"
+                asp-fallback-test="window.M"></script>
+    </environment>
+    <environment include="Development">
+        <script src="~/lib/materialize-src/js/bin/materialize.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+
+    @*Finally, use the RenderSection directive once more to let views add their own ad-hoc JavaScript code.*@
+    @RenderSection("Scripts", required: false)
 </body>
+
 </html>
+
+
+@*Friendly reminder: Including JavaScript code at the bottom of the <body> tag is a best practice. 
+    If the code was put in upper parts, the rendering of the DOM would have been blocked until the JavaScript code gets interpretted by the browser.*@
