@@ -4,11 +4,16 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedioClinic", "MedioClinic\MedioClinic.csproj", "{8C7B0A75-FA83-474F-A274-8A05E949A157}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{3EB3C2EE-0F89-46CD-9CCD-586B707825E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{3EB3C2EE-0F89-46CD-9CCD-586B707825E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XperienceAdapter", "XperienceAdapter\XperienceAdapter.csproj", "{5C1C37DE-1CCC-4058-AF31-1F20AD5B011B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XperienceAdapter", "XperienceAdapter\XperienceAdapter.csproj", "{5C1C37DE-1CCC-4058-AF31-1F20AD5B011B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{ACC193DD-BBBE-4924-A311-D38529EFFFB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Business\Business.csproj", "{ACC193DD-BBBE-4924-A311-D38529EFFFB1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4D1BC782-752F-4E11-AC3A-288A9518346C}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

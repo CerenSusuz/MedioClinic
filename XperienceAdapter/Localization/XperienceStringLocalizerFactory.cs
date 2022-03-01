@@ -14,10 +14,8 @@ namespace XperienceAdapter.Localization
         /// <param name="resourceSource"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public IStringLocalizer Create(Type resourceSource)
-        {
-            throw new NotImplementedException();
-        }
+        public IStringLocalizer Create(Type resourceSource) =>
+                new XperienceStringLocalizer();
 
         /// <summary>
         /// For both of the Create methods specified the interface, simply return a new instance of the XperienceStringLocalizer class.
@@ -26,9 +24,7 @@ namespace XperienceAdapter.Localization
         /// <param name="location"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public IStringLocalizer Create(string baseName, string location)
-        {
-            throw new NotImplementedException();
-        }
+        public IStringLocalizer Create(string baseName, string location) =>
+                 new XperienceStringLocalizer();
     }
 }

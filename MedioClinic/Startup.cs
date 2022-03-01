@@ -1,7 +1,9 @@
 using Autofac;
+using CMS.DataEngine;
 using Core.Configuration;
 using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
+using Kentico.PageBuilder.Web.Mvc;
 using Kentico.Web.Mvc;
 using MedioClinic.Configuration;
 using MedioClinic.Extensions;
@@ -18,19 +20,25 @@ namespace MedioClinic
 {
     public class Startup
     {
-        public IWebHostEnvironment Environment { get; }
-        public AutoFacConfig AutoFacConfig => new AutoFacConfig();
-
         /// <summary>
         /// The error controller won't be routed using the CTB router. Thus you need to take measures to avoid conflicts with conventional and CTB routes.
         /// </summary>
         private const string ConventionalRoutingControllers = "Error|ImageUploader|MediaLibraryUploader|FormTest|Account|Profile";
 
+        public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
+
         public IConfigurationSection? Options { get; }
+
+               public string? DefaultCulture => SettingsKeyInfoProvider.GetValue($"{Options?.GetSection("SiteCodeName")}.CMSDefaultCultureCode");
+
+        public AutoFacConfig AutoFacConfig => 
+            new AutoFacConfig();
 
         public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
             Environment = environment;
+            Configuration = configuration;
             Options = configuration.GetSection(nameof(XperienceOptions));
         }
 
@@ -42,7 +50,7 @@ namespace MedioClinic
             // Enable desired Kentico Xperience features
             var kenticoServiceCollection = services.AddKentico(features =>
             {
-                // features.UsePageBuilder();
+                features.UsePageBuilder();
                 // features.UseActivityTracking();
                 // features.UseABTesting();
                 // features.UseWebAnalytics();
@@ -68,14 +76,14 @@ namespace MedioClinic
             }
 
             services.AddAuthentication();
-            // services.AddAuthorization();
-
-            //To help in mitigating clickjacking attacks, add a call to
-            services.AddAntiforgery();
+            //services.AddAuthorization();
 
             services.AddLocalization();
+            //To help in mitigating clickjacking attacks, add a call to
+            services.AddAntiforgery(options => options.SuppressXFrameOptionsHeader = false);
 
             services.AddControllersWithViews()
+                //.AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new UserModelBinderProvider()))
                 .AddDataAnnotationsLocalization(options =>
                 {
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
@@ -85,8 +93,10 @@ namespace MedioClinic
                         return factory.Create("SharedResource", assemblyName);
                     };
                 });
-
             services.Configure<XperienceOptions>(Options);
+            var xperienceOptions = Options.Get<XperienceOptions>();
+            //ConfigureIdentityServices(services, xperienceOptions);
+            //ConfigurePageBuilderFilters();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -123,10 +133,13 @@ namespace MedioClinic
                         await context.Response.WriteAsync(new string(' ', 512)); // IE padding
                     });
                 });
-
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
             }
 
             app.UseLocalizedStatusCodePagesWithReExecute("/{0}/error/{1}/");
+
+            app.UseHttpsRedirection();
 
             app.UseStaticFiles();
 
@@ -141,7 +154,7 @@ namespace MedioClinic
             app.UseRequestCulture();
 
             app.UseAuthentication();
-            // app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -155,11 +168,6 @@ namespace MedioClinic
                     {
                         controller = ConventionalRoutingControllers
                     });
-
-                //endpoints.MapGet("/", async context =>
-                //{
-                //    await context.Response.WriteAsync("The site has not been configured yet.");
-                //});
 
                 endpoints.MapDefaultControllerRoute();
             });

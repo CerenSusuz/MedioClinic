@@ -38,8 +38,10 @@ public class CultureSwitch : ViewComponent
 	/// <returns></returns>
 	public async Task<IViewComponentResult> InvokeAsync(string cultureSwitchId)
 	{
-		var variants = await GetUrlCultureVariantsAsync();
-		var model = (cultureSwitchId, variants?.ToDictionary(kvp1 => kvp1.Key, kvp2 => kvp2.Value));
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        var variants = await GetUrlCultureVariantsAsync();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+        var model = (cultureSwitchId, variants?.ToDictionary(kvp1 => kvp1.Key, kvp2 => kvp2.Value));
 
 		return View(model);
 	}
@@ -108,8 +110,10 @@ public class CultureSwitch : ViewComponent
 			return databaseVariants.Select(variant => new KeyValuePair<SiteCulture, string>(variant.Key, variant.Value.RelativeUrl!));
 		}
 
-		return null;
-	}
+#pragma warning disable CS8603 // Possible null reference return.
+        return null;
+#pragma warning restore CS8603 // Possible null reference return.
+    }
 
 
 	/// <summary>
@@ -147,11 +151,17 @@ public class CultureSwitch : ViewComponent
 
 		if (currentCulture != null && !ExcludedPaths.Any(path => searchPath.Contains(path)))
 		{
-			return await GetDatabaseUrlVariantsAsync(searchPath, currentCulture) ?? GetNonDatabaseUrlVariants(searchPath);
-		}
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            return await GetDatabaseUrlVariantsAsync(searchPath, currentCulture) ?? GetNonDatabaseUrlVariants(searchPath);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8603 // Possible null reference return.
+        }
 
-		return null;
-	}
+#pragma warning disable CS8603 // Possible null reference return.
+        return null;
+#pragma warning restore CS8603 // Possible null reference return.
+    }
 
 
 }

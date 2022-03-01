@@ -12,9 +12,9 @@ namespace Business.Repositories
 	/// Stores pages without page type-specific data (coupled data).
 	///  this class only compensates for the abstract nature of XperienceAdapter.Repositories.BasePageRepository.
 	/// </summary>
-	public class BasePageRepository : BasePageRepository<BasicPage, TreeNode>
+	public class BasicPageRepository : BasePageRepository<BasicPage, TreeNode>
 	{
-		public BasePageRepository(IRepositoryServices repositoryDependencies) : base(repositoryDependencies)
+		public BasicPageRepository(IRepositoryServices repositoryDependencies) : base(repositoryDependencies)
 		{
 		}
 	}

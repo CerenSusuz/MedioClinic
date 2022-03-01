@@ -89,7 +89,7 @@ namespace MedioClinic.Extensions
 
 				var newQueryString = queryFormat == null ? QueryString.Empty : new QueryString(formatedQueryString);
 
-				await ReexecuteRequest(context, originalPath, originalQueryString, newPath, newQueryString);
+				await ReExecuteRequest(context, originalPath, originalQueryString, newPath, newQueryString);
 			});
 		}
 

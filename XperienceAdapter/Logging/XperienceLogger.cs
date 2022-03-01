@@ -18,7 +18,7 @@ namespace XperienceAdapter.Logging
             _eventLogService = eventLogService ?? throw new ArgumentNullException(nameof(eventLogService));
         }
 
-        public IDisposable BeginScope<TState>(TState state) => null;
+        public IDisposable BeginScope<TState>(TState state) => null!;
 
         public bool IsEnabled(LogLevel logLevel) => logLevel != LogLevel.None;
 
