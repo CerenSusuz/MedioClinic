@@ -1,0 +1,14 @@
+﻿@using Business.Models 
+@model PageViewModel<(HomePage HomePage, IEnumerable<CompanyService> CompanyServices)>
+
+@{
+    string? backgroundLeft, backgroundRight;
+    backgroundLeft = backgroundRight = default;
+    var attachments = Model?.Data.HomePage?.Attachments;
+
+    if (attachments?.Any() == true)
+    {
+        backgroundLeft = attachments.FirstOrDefault(attachment => attachment?.FileName?.Contains("background-left") == true)?.AttachmentUrl?.RelativePath;
+        backgroundRight = attachments.FirstOrDefault(attachment => attachment?.FileName?.Contains("background-right") == true)?.AttachmentUrl?.RelativePath;
+    }
+}
