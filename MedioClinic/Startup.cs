@@ -21,6 +21,11 @@ namespace MedioClinic
         public IWebHostEnvironment Environment { get; }
         public AutoFacConfig AutoFacConfig => new AutoFacConfig();
 
+        /// <summary>
+        /// The error controller won't be routed using the CTB router. Thus you need to take measures to avoid conflicts with conventional and CTB routes.
+        /// </summary>
+        private const string ConventionalRoutingControllers = "Error|ImageUploader|MediaLibraryUploader|FormTest|Account|Profile";
+
         public IConfigurationSection? Options { get; }
 
         public Startup(IWebHostEnvironment environment, IConfiguration configuration)
