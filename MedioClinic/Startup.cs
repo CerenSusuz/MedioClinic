@@ -132,11 +132,13 @@ namespace MedioClinic
 
             app.UseKentico();
 
-            app.UseRequestCulture();
-
             app.UseCookiePolicy();
 
             app.UseCors();
+
+            app.UseRouting();
+
+            app.UseRequestCulture();
 
             app.UseAuthentication();
             // app.UseAuthorization();
