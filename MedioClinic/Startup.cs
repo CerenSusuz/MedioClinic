@@ -147,10 +147,21 @@ namespace MedioClinic
             {
                 endpoints.Kentico().MapRoutes();
 
+                endpoints.MapControllerRoute(
+                    name: "error",
+                    pattern: "{culture}/error/{code}",
+                    defaults: new { controller = "Error", action = "Index" },
+                    constraints: new
+                    {
+                        controller = ConventionalRoutingControllers
+                    });
+
                 //endpoints.MapGet("/", async context =>
                 //{
                 //    await context.Response.WriteAsync("The site has not been configured yet.");
                 //});
+
+                endpoints.MapDefaultControllerRoute();
             });
         }
 
