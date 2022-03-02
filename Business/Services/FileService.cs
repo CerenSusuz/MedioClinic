@@ -1,9 +1,15 @@
-﻿using Business.Models;
-using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+
+
+using XperienceAdapter.Models;
+using Business.Models;
+
 
 namespace Business.Services
 {
@@ -45,7 +51,67 @@ namespace Business.Services
 		},
 	};
 
-        public (string Name, string Extension) GetSafeFileName(string completeFileName)
+		private static bool IsValidFileExtensionAndSignature(string fileName, string fileExtension, Stream data, string[] permittedExtensions)
+		{
+			if (string.IsNullOrEmpty(fileName) || data == null || data.Length == 0)
+			{
+				return false;
+			}
+
+			if (string.IsNullOrEmpty(fileExtension) || !permittedExtensions.Contains(fileExtension))
+			{
+				return false;
+			}
+
+			data.Position = 0;
+
+			using (var reader = new BinaryReader(data))
+			{
+				if (fileExtension.Equals(".txt") || fileExtension.Equals(".csv") || fileExtension.Equals(".prn"))
+				{
+					if (_allowedChars.Length == 0)
+					{
+						// Limits characters to ASCII encoding.
+						for (var i = 0; i < data.Length; i++)
+						{
+							if (reader.ReadByte() > sbyte.MaxValue)
+							{
+								return false;
+							}
+						}
+					}
+					else
+					{
+						// Limits characters to ASCII encoding and
+						// values of the _allowedChars array.
+						for (var i = 0; i < data.Length; i++)
+						{
+							var b = reader.ReadByte();
+							if (b > sbyte.MaxValue ||
+								!_allowedChars.Contains(b))
+							{
+								return false;
+							}
+						}
+					}
+
+					return true;
+				}
+
+				// File signature check
+				// --------------------
+				// With the file signatures provided in the _fileSignature
+				// dictionary, the following code tests the input content's
+				// file signature.
+				var signatures = _fileSignature[fileExtension];
+				var headerBytes = reader.ReadBytes(signatures.Max(m => m.Length));
+
+				return signatures.Any(signature =>
+					headerBytes.Take(signature.Length).SequenceEqual(signature));
+			}
+		}
+
+		public (string Name, string Extension) GetSafeFileName(string completeFileName)
         {
             throw new NotImplementedException();
         }
@@ -54,5 +120,9 @@ namespace Business.Services
         {
             throw new NotImplementedException();
         }
+
+
+
+
     }
 }
