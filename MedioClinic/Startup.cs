@@ -30,10 +30,9 @@ namespace MedioClinic
 
         public IConfigurationSection? Options { get; }
 
-               public string? DefaultCulture => SettingsKeyInfoProvider.GetValue($"{Options?.GetSection("SiteCodeName")}.CMSDefaultCultureCode");
+        public string? DefaultCulture => SettingsKeyInfoProvider.GetValue($"{Options?.GetSection("SiteCodeName")}.CMSDefaultCultureCode");
 
-        public AutoFacConfig AutoFacConfig => 
-            new AutoFacConfig();
+        public AutoFacConfig AutoFacConfig => new AutoFacConfig();
 
         public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
@@ -50,7 +49,7 @@ namespace MedioClinic
             // Enable desired Kentico Xperience features
             var kenticoServiceCollection = services.AddKentico(features =>
             {
-                features.UsePageBuilder();
+                // features.UsePageBuilder();
                 // features.UseActivityTracking();
                 // features.UseABTesting();
                 // features.UseWebAnalytics();
@@ -75,7 +74,7 @@ namespace MedioClinic
                 kenticoServiceCollection.DisableVirtualContextSecurityForLocalhost();
             }
 
-            services.AddAuthentication();
+            //services.AddAuthentication();
             //services.AddAuthorization();
 
             services.AddLocalization();
@@ -153,7 +152,7 @@ namespace MedioClinic
 
             app.UseRequestCulture();
 
-            app.UseAuthentication();
+            //app.UseAuthentication();
             //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
