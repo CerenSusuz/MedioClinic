@@ -6,6 +6,9 @@ using XperienceAdapter.Models;
 
 namespace Business.Models
 {
+    /// <summary>
+    /// To make work with uploaded files more convenient, you'll want to wrap both the uploaded file and the processing result state into one single object. Chances are, you'll pass the processed file onto multiple other places in your code base. Therefore, it is better to have a wrapper instead of a two-piece tuple
+    /// </summary>
     public class ProcessedFile : IDisposable
     {
         private bool _disposed;
