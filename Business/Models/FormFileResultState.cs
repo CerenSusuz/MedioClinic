@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Business.Models
 {
+
     public enum FormFileResultState
     {
         FileOk,
