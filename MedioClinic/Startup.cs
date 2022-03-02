@@ -167,7 +167,7 @@ namespace MedioClinic
                     {
                         controller = ConventionalRoutingControllers
                     });
-
+                //Map the default controller route
                 endpoints.MapDefaultControllerRoute();
             });
         }
