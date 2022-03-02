@@ -24,7 +24,8 @@ document.addEventListener("DOMContentLoaded", function () {
      * @param {string} message The system message.
      * @param {string} type Either "info", "warning", or "error".
      * @param {bool} logToConsole Instructs to also log to console.
-     */
+    */
+    //Add a function to show messages
     medioClinic.showMessage = function (message, type, logToConsole) {
         var messageElement = document.querySelector(".mc-system-messages");
 
@@ -50,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     };
-
+    //Create the buildMessageMarkup function
     /**
      * Builds an HTML element of a system message.
      * @param {string} message The system message.
