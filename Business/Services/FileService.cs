@@ -142,56 +142,11 @@ namespace Business.Services
 			return (safeName, safeExtension);
 		}
 
-		public async Task<ProcessedFile> ProcessFormFileAsync(IFormFile formFile,
-			string[] permittedExtensions,
-			long sizeLimit = 4194304)
-		{
-			// Don't trust the file name sent by the client. To display
-			// the file name, HTML-encode the value.
-			var trustedFileNameForDisplay = WebUtility.HtmlEncode(
-				formFile.FileName);
+		public Task<ProcessedFile> ProcessFormFileAsync(IFormFile formFile, string[] permittedExtensions, long sizeLimit)
+        {
+            throw new NotImplementedException();
+        }
 
-			// Check the file length. This check doesn't catch files that only have 
-			// a BOM as their content.
-			if (formFile.Length == 0)
-			{
-				return new ProcessedFile(FormFileResultState.FileEmpty);
-			}
-
-			if (formFile.Length > sizeLimit)
-			{
-				return new ProcessedFile(FormFileResultState.FileTooBig);
-			}
-
-			using (var memoryStream = new MemoryStream())
-			{
-				await formFile.CopyToAsync(memoryStream);
-
-				// Check the content length in case the file's only
-				// content was a BOM and the content is actually
-				// empty after removing the BOM.
-				if (memoryStream.Length == 0)
-				{
-					return new ProcessedFile(FormFileResultState.FileEmpty);
-				}
-
-				var safeName = GetSafeFileName(formFile.FileName);
-
-				if (!IsValidFileExtensionAndSignature(
-					safeName.Name, $".{safeName.Extension}", memoryStream, permittedExtensions))
-				{
-					return new ProcessedFile(FormFileResultState.ForbiddenFileType);
-				}
-				else
-				{
-					var uploadedFile = new UploadedFile(formFile);
-					uploadedFile.FileName = $"{safeName.Name}.{safeName.Extension}";
-
-					return new ProcessedFile(FormFileResultState.FileOk, new UploadedFile(formFile));
-				}
-			}
-		}
-		
 		/// <summary>
 		/// To sanitize potentially dangerous file names, implement a new "RemoveNonLettersOrDigits" static method.
 		/// </summary>
