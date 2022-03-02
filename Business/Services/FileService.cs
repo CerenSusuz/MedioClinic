@@ -121,8 +121,16 @@ namespace Business.Services
             throw new NotImplementedException();
         }
 
+		/// <summary>
+		/// To sanitize potentially dangerous file names, implement a new "RemoveNonLettersOrDigits" static method.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
+		private static string RemoveNonLettersOrDigits(string input) =>
+	 new string((from c in input
+				 where char.IsWhiteSpace(c) || char.IsLetterOrDigit(c)
+				 select c)
+		.ToArray());
 
-
-
-    }
+	}
 }
