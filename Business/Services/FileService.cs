@@ -112,11 +112,37 @@ namespace Business.Services
 		}
 
 		public (string Name, string Extension) GetSafeFileName(string completeFileName)
-        {
-            throw new NotImplementedException();
-        }
+		{
+			if (string.IsNullOrEmpty(completeFileName))
+			{
+				throw new ArgumentException("File name is null or an empty string.", nameof(completeFileName));
+			}
 
-        public Task<ProcessedFile> ProcessFormFileAsync(IFormFile formFile, string[] permittedExtensions, long sizeLimit)
+			var separator = '.';
+			var segments = completeFileName.Split(separator);
+			string name, extension;
+
+			if (segments?.Length > 1)
+			{
+				var subtractedLength = segments.Length - 1;
+				string[] segmentsExceptLast = new string[subtractedLength];
+				Array.Copy(segments, segmentsExceptLast, subtractedLength);
+				name = segmentsExceptLast.Length == 1 ? segmentsExceptLast[0] : string.Join(separator.ToString(), segmentsExceptLast);
+				extension = segments[subtractedLength];
+			}
+			else
+			{
+				name = completeFileName;
+				extension = null;
+			}
+
+			var safeName = RemoveNonLettersOrDigits(name)?.ToLowerInvariant();
+			var safeExtension = RemoveNonLettersOrDigits(extension)?.ToLowerInvariant();
+
+			return (safeName, safeExtension);
+		}
+
+		public Task<ProcessedFile> ProcessFormFileAsync(IFormFile formFile, string[] permittedExtensions, long sizeLimit)
         {
             throw new NotImplementedException();
         }
