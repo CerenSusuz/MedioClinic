@@ -19,7 +19,7 @@ namespace MedioClinic.Controllers
 
         protected readonly IStringLocalizer<SharedResource> _stringLocalizer;
 
-
+        protected string ErrorTitle => Localize("General.Error");
         public BaseController(ILogger<BaseController> logger,
                           IOptionsMonitor<XperienceOptions> optionsMonitor,
                           IStringLocalizer<SharedResource> stringLocalizer)

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using XperienceAdapter.Localization;
@@ -70,7 +71,38 @@ namespace MedioClinic.Controllers
 
 
 
+		public async Task<IActionResult> Detail(CancellationToken cancellationToken)
+		{
+			if (_pageDataContextRetriever.TryRetrieve<CMS.DocumentEngine.Types.MedioClinic.Doctor>(out var pageDataContext)
+				&& pageDataContext.Page != null)
+			{
+				var doctorPath = pageDataContext.Page.NodeAliasPath;
 
+				if (!string.IsNullOrEmpty(doctorPath))
+				{
+					var doctor = (await _doctorRepository.GetPagesInCurrentCultureAsync(
+						cancellationToken,
+						filter => filter
+							.Path(doctorPath, PathTypeEnum.Single)
+							.TopN(1),
+						buildCacheAction: cache => cache
+							.Key($"{nameof(DoctorsController)}|Doctor|{doctorPath}")
+							.Dependencies((_, builder) => builder
+								.PageType(CMS.DocumentEngine.Types.MedioClinic.Doctor.CLASS_NAME)
+								.PagePath(doctorPath, PathTypeEnum.Single))))
+								.FirstOrDefault();
+
+					if (doctor != null)
+					{
+						var viewModel = GetPageViewModel(pageDataContext.Metadata, doctor);
+
+						return View(viewModel);
+					}
+				}
+			}
+
+			return NotFound();
+		}
 
 
 	}
